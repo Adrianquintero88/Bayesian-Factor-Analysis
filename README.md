@@ -1,7 +1,7 @@
 # Bayesian-Factor-Analysis
 This repository contains the codes from the paper "Bayesian Exploratory Factor Analysis via Gibbs Sampling"
 
-Authors: Adrian Quintero, Emmanuel Lesaffre and Geert Verbeke
+Authors: Adrian Quintero, Emmanuel Lesaffre and Geert Verbeke.
 Main responsible for the code: Adrian Quintero
 
 Software used:
