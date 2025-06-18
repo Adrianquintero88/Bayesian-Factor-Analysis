@@ -1,0 +1,47 @@
+model {
+    for (i in 1:N) {
+
+        for (j in 1:nresp) {
+           y[i,j] ~ dnorm(mu[i,j], tau[j]) 
+
+           mu[i,j] <- t*lam[j,1]*eta[i,1]
+
+           uj[i,j]<- lam[j,1]*(y[i,j]-mu[i,j])*tau[j]
+        }
+
+        eta[i,1:m] ~ dmnorm(zero, ident)
+
+        u[i] <- eta[i,m]*sum(uj[i,1:nresp])
+
+    }
+
+    ubar <- sum(u[])
+
+    lam[1,1] ~ dnorm(0,1)T(0,)
+    lam[2,1] ~ dnorm(0,1)
+    lam[3,1] ~ dnorm(0,1)
+    lam[4,1] ~ dnorm(0,1)
+    lam[5,1] ~ dnorm(0,1)
+    lam[6,1] ~ dnorm(0,1)
+    lam[7,1] ~ dnorm(0,1)
+    lam[8,1] ~ dnorm(0,1)
+    lam[9,1] ~ dnorm(0,1)
+    lam[10,1] ~ dnorm(0,1)
+	
+    lam[1,2] <- 0 #This parameter is not really used
+    lam[2,2] ~ dnorm(0,1)T(0,)
+    lam[3,2] ~ dnorm(0,1)
+    lam[4,2] ~ dnorm(0,1)
+    lam[5,2] ~ dnorm(0,1)
+    lam[6,2] ~ dnorm(0,1)
+    lam[7,2] ~ dnorm(0,1)
+    lam[8,2] ~ dnorm(0,1)
+    lam[9,2] ~ dnorm(0,1)
+    lam[10,2] ~ dnorm(0,1)
+
+    for (j in 1:nresp) {
+        tau[j] ~ dgamma(1.1,0.05)
+        sig2[j] <- 1/tau[j]
+    }
+
+}

@@ -1,0 +1,43 @@
+model {
+    for (i in 1:N) {
+
+        for (j in 1:nresp) {
+           y[i,j] ~ dnorm(mu[i,j], tau[j]) 
+
+           mu[i,j] <- lam2[j,1]*eta[i,1] + lam2[j,2]*eta[i,2] + lam2[j,3]*eta[i,3] + lam2[j,4]*eta[i,4]
+        }
+
+        eta[i,1:m] ~ dmnorm(zero, ident)
+
+    }
+
+    prec[1] <- 1/pow(0.03,2) #Spike
+    prec[2] <- 1/pow(0.3,2) #Slab
+
+    pslab ~ dbeta(1/m,50)
+
+    for (k in 1:m) {
+       gamma[k] ~ dbern(pslab)
+       nu[k] ~ dnorm(0,prec[gamma[k]+1])
+       lam2[1:nresp,k] <- lam[1:nresp,k]*nu[k]
+
+       dim[k] <- gamma[k]
+       dimrem[k] <- gamma[k]*equals(sum(lamsig[1:nresp,k]) , 1)
+    }
+
+    dgamma <- sum(dim[1:m])#sum(gamma[1:m]) #Dimension
+    remove <- sum(dimrem[1:m]) #Dimension
+
+    for (j in 1:nresp) {
+       for (k in 1:m) {
+          lam[j,k] ~ dnorm(0,1)
+          lamsig[j,k] <- step(abs(lam2[j,k])-0.05)
+       }
+    }
+
+    for (j in 1:nresp) {
+        tau[j] ~ dgamma(1.5,0.25)
+        sig2[j] <- 1/tau[j]
+    }
+
+}
